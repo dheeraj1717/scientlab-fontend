@@ -1,0 +1,16 @@
+[
+    {
+        "device": "IoT-EDGE",
+        "region": "EU",
+        "location": "Stockholm",
+        "latitude": 59.41085433959961,
+        "longitude": 17.80006980895996
+    },
+    {
+        "device": "IoT-EDGE",
+        "region": "APAC",
+        "location": "Tokyo",
+        "latitude": 36.5748441,
+        "longitude": 139.2394179
+    }
+]

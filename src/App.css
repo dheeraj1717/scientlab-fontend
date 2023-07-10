@@ -36,3 +36,118 @@
     transform: rotate(360deg);
   }
 }
+
+/* Search Start */
+.search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 100px;
+}
+
+.search-button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+}
+
+.search-button:focus {
+  outline: none;
+}
+
+.search-icon {
+  color: #000;
+  font-size: 18px;
+}
+
+.search-icon:hover {
+  color: #007bff;
+}
+/* Search End */
+
+/* Navbar */
+.navbar {
+  height: 60px;
+  padding: 10px 20px;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.nav-link {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  margin-right: 10px;
+  height: 34px;
+  width: 200px;
+}
+
+.user-dropdown {
+  display: flex;
+  align-items: center;
+}
+
+.user-dropdown-toggle {
+  color: #333;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.user-logout {
+  color: #333;
+  font-size: 18px;
+}
+
+.user-logout:hover {
+  color: #000;
+  font-weight: bold;
+}
+
+/* src/App.css */
+
+.user-picture {
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+}
+
+.logout-button {
+  color: #333;
+  font-size: 16px;
+}
+
+.logout-button:hover {
+  color: #000;
+  font-weight: bold;
+}
+
+.main-content {
+  margin-left: 200px; /* Adjust this value to match the width of the sidebar */
+  padding-top: 80px;
+}
+
+/* src/App.css */
+
+svg {
+  overflow: visible;
+}
+
+.react-tooltip {
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 12px;
+}
