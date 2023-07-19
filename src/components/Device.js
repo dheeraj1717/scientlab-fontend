@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import DateTimePicker from 'react-datetime-picker';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { MDBDataTable, MDBTableHead  } from 'mdbreact';
+import { MDBDataTable } from 'mdbreact';
 import {CSVLink} from 'react-csv'
 import { getMetrics, getStats, clearMetrics } from '../redux/actions/deviceActions';
 
@@ -17,7 +17,6 @@ const Device = () => {
     const devices = useSelector(state => state.devices.devices);
     const user = useSelector((state) => state.auth.user);
     const metrics = useSelector(state => state.devices.metrics);
-
 
     useEffect(() => {
         dispatch(clearMetrics())
@@ -87,7 +86,12 @@ const DeviceMetricTable = () => {
     <>
     <hr />
     <div className="d-flex justify-content-end">
+     {updatedMetrics.length>0 && 
     <Button> <CSVLink data= {updatedMetrics} header={DeviceHeaders} filename="DevicesMetrics.csv" style={{color:'#ffffff', textDecoration: "none"}}>Export</CSVLink></Button>
+     }
+      {updatedMetrics.length===0 && 
+    <Button>Export</Button>
+     }
     </div>
     <MDBDataTable
       scrollY

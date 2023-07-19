@@ -88,12 +88,19 @@ const Environment = () => {
         <>
         <hr />
         <div className="d-flex justify-content-end">
+        {updatedMetrics.length >0 &&
         <Button> <CSVLink data= {updatedMetrics} header={DeviceHeaders} filename="EnvironmentMetrices.csv" style={{color:'#ffffff', textDecoration: "none"}}>Export</CSVLink></Button>
+        }  
+      {updatedMetrics.length===0 && 
+       <Button>Export</Button>
+       }
         </div>
         <MDBDataTable
           striped
           bordered
           small
+          scrollY
+          maxHeight="300px"
           data={data}
         />
        
@@ -140,7 +147,7 @@ const Environment = () => {
         />&nbsp;&nbsp;
         <Button onClick={viewMetrics}>Go</Button>
         &nbsp;&nbsp;
-        {metrics.length > 0 ? <LineChart width={800} height={300} data={metrics}>
+        {metrics.length >= 0 ? <LineChart width={800} height={300} data={metrics}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="timestamp" />
             <YAxis />
