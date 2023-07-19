@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import DateTimePicker from 'react-datetime-picker';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-
+import { MDBDataTable, MDBTableHead  } from 'mdbreact';
+import {CSVLink} from 'react-csv'
 import { getMetrics, getStats, clearMetrics } from '../redux/actions/deviceActions';
+
 
 const Device = () => {
     const dispatch = useDispatch();
@@ -16,9 +18,11 @@ const Device = () => {
     const user = useSelector((state) => state.auth.user);
     const metrics = useSelector(state => state.devices.metrics);
 
+
     useEffect(() => {
         dispatch(clearMetrics())
     }, [])
+
     const viewMetrics = () => {
         if (device) {
             dispatch(getMetrics({ "device": device.name, "location": device.location, "startDate": fromDate, "endDate": toDate }, user.accessToken, 'device'))
@@ -30,7 +34,85 @@ const Device = () => {
         setDevice(device);
     }
 
-    return (<div>
+const DeviceMetricTable = () => {
+    const updatedMetrics = (metrics.map((eachMetric) => (
+        {
+            timestamp: eachMetric.timestamp,
+            memoryUsage: eachMetric.memoryUsage,
+            cpuUsage: eachMetric.cpuUsage,
+            temperatureC: eachMetric.temperatureC
+        }
+    ))) 
+
+    const  DeviceHeaders = [
+      { label: "Time stap", key: "timestamp" },
+      { label: "Memory Usage", key: "memoryUsage" },
+      { label: "CPU Usage", key: "cpuUsage" },
+      { label: "Temperature", key: "temperatureC" }
+    ];
+
+  const data = {
+    columns: [
+      {
+        label: 'Time Stamp',
+        field: 'timestamp',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'Memory Usage',
+        field: 'memoryUsage',
+        sort: 'asc',
+        width: 270
+      },
+      {
+        label: 'CPU usage',
+        field: 'cpuUsage',
+        sort: 'asc',
+        width: 200
+      },
+      {
+        label: 'Temperature',
+        field: 'temperatureC',
+        sort: 'asc',
+        width: 100
+      },
+    ],
+    rows: updatedMetrics
+   
+  };
+
+  
+  return (
+    <>
+    <hr />
+    <div className="d-flex justify-content-end">
+    <Button> <CSVLink data= {updatedMetrics} header={DeviceHeaders} filename="DevicesMetrics.csv" style={{color:'#ffffff', textDecoration: "none"}}>Export</CSVLink></Button>
+    </div>
+    <MDBDataTable
+      scrollY
+      maxHeight="300px"
+      bordered
+      small
+      data={data}
+    />
+   
+    </>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+    return (
+        <>
+        <div>
         Device Location:
         <select onChange={selectDevice}>
             <option default>Select Device Location</option>
@@ -52,8 +134,7 @@ const Device = () => {
         />&nbsp;&nbsp;
         <Button onClick={viewMetrics}>Go</Button>
         &nbsp;&nbsp;
-        <Button>Export</Button>
-        {metrics.length > 0 ? <LineChart width={800} height={300} data={metrics}>
+        {metrics.length >= 0 ? <LineChart width={800} height={300} data={metrics}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="timestamp" />
             <YAxis />
@@ -65,7 +146,11 @@ const Device = () => {
             <Line type="monotone" dataKey="temperatureC" stroke="#a14396" />
 
         </LineChart> : ""}
-    </div>);
+    </div>
+    
+    {metrics.length>=0 && DeviceMetricTable()}
+  </>
+);
 }
 
 export default Device;
