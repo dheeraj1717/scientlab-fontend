@@ -9,8 +9,6 @@ import { getMetrics, getStats, clearMetrics } from '../redux/actions/deviceActio
 
 const Environment = () => {
     const dispatch = useDispatch();
-    const [timeframe, setTimeframe] = useState('daily');
-    const [minimized, setMinimized] = useState(false);
     const [device, setDevice] = useState(null);
     const [fromDate, setFromDate] = useState(new Date());
     const [toDate, setToDate] = useState(new Date());
@@ -35,21 +33,11 @@ const Environment = () => {
         setDevice(device);
     }
 
-
-    const EnvironmentTable = () => {
-        const updatedMetrics = (metrics.map((eachMetric) => (
-            {
-                timestamp: eachMetric.timestamp,
-                humidity: eachMetric.humidity,
-                temperatureC: eachMetric.temperatureC,
-                temperatureF: eachMetric.temperatureF
-            }
-        )))
-
+    const loadEnvironmentTable = () => {
         const data = {
             columns: [
                 {
-                    label: 'Time Stamp',
+                    label: 'Timestamp',
                     field: 'timestamp',
                     sort: 'asc',
                     width: 150
@@ -61,7 +49,7 @@ const Environment = () => {
                     width: 270
                 },
                 {
-                    label: 'Temperature(F)',
+                    label: 'Temperature (F)',
                     field: 'temperatureF',
                     sort: 'asc',
                     width: 200
@@ -73,27 +61,23 @@ const Environment = () => {
                     width: 100
                 },
             ],
-            rows: updatedMetrics
-
+            rows: metrics
         };
 
-        const DeviceHeaders = [
-            { label: "Time stap", key: "timestamp" },
-            { label: "Huumidity", key: "humidity" },
+        const deviceHeaders = [
+            { label: "Timestamp", key: "timestamp" },
+            { label: "Humidity", key: "humidity" },
             { label: "Temperature(F)", key: "temperatureF" },
             { label: "Temperature(C)", key: "temperatureC" }
-
         ];
-
 
         return (
             <>
-                <hr />
                 <div className="d-flex justify-content-end">
-                    {updatedMetrics.length > 0 &&
-                        <Button> <CSVLink data={updatedMetrics} header={DeviceHeaders} filename="EnvironmentMetrices.csv" style={{ color: '#ffffff', textDecoration: "none" }}>Export</CSVLink></Button>
+                    {metrics.length > 0 &&
+                        <Button> <CSVLink data={metrics} header={deviceHeaders} filename="EnvironmentMetrices.csv" style={{ color: '#ffffff', textDecoration: "none" }}>Export</CSVLink></Button>
                     }
-                    {updatedMetrics.length === 0 &&
+                    {metrics.length === 0 &&
                         <Button>Export</Button>
                     }
                 </div>
@@ -109,21 +93,6 @@ const Environment = () => {
             </>
         );
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     return (
         <>
@@ -160,9 +129,8 @@ const Environment = () => {
                     <Line type="monotone" dataKey="humidity" stroke="#82ca9d" />
                 </LineChart> : ""}
             </div>
-            {metrics.length >= 0 && EnvironmentTable()}
-
-
+            <hr />
+            {metrics.length >= 0 && loadEnvironmentTable()}
         </>);
 }
 

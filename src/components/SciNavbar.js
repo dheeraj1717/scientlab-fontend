@@ -27,7 +27,7 @@ function SciNavbar() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav style={{ position: 'absolute', right: 0 }}>
-                    <div style={{ right: 0 }}><SearchBar /></div>
+                    <div style={{ paddingTop: "6px" }}><SearchBar /></div>
                     <Dropdown style={{ "paddingRight": "10px" }}>
                         <Dropdown.Toggle variant="dark" id="dropdown-basic">
                             {user.image && user.image !== "" ?

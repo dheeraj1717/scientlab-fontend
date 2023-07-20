@@ -20,7 +20,6 @@ function Dashboard() {
     dispatch(getDevices(user.accessToken))
   }, [])
 
-
   const handleMarkerClick = (point) => {
     console.log(`selected location: ${point.location}`);
     dispatch(clearMetrics())
@@ -60,13 +59,13 @@ function Dashboard() {
                     Temperature_C
                     <CircularProgressbar
                       value={stats.temperatureC}
-                      text={stats && stats.temperatureC ? `${stats.temperatureC}%` : ''}
+                      text={stats && stats.temperatureC ? `${stats.temperatureC}%` : '0%'}
                       strokeWidth={12}
                       styles={buildStyles({
                         rotation: 0.7,
                         strokeLinecap: 'butt',
                         pathTransitionDuration: 0.5,
-                        pathColor: `#3B98D6`,
+                        pathColor: parseInt(stats.temperatureC) < 60 ? `#3B98D6` : `red`,
                         textColor: '#333333',
                         trailColor: '#f8f8f8',
                         backgroundColor: '#e4e4e4',
@@ -79,13 +78,13 @@ function Dashboard() {
                     CPU Usage
                     <CircularProgressbar
                       value={stats.cpuUsage}
-                      text={stats && stats.cpuUsage ? `${stats.cpuUsage}%` : ''}
+                      text={stats && stats.cpuUsage ? `${stats.cpuUsage}%` : '0%'}
                       strokeWidth={12}
                       styles={buildStyles({
                         rotation: 0.7,
                         strokeLinecap: 'butt',
                         pathTransitionDuration: 0.5,
-                        pathColor: `#3B98D6`,
+                        pathColor: parseInt(stats.cpuUsage) < 60 ? `#3B98D6` : `red`,
                         textColor: '#333333',
                         trailColor: '#f8f8f8',
                         backgroundColor: '#e4e4e4',
@@ -98,13 +97,13 @@ function Dashboard() {
                     Memory Usage
                     <CircularProgressbar
                       value={stats.memoryUsage}
-                      text={stats && stats.memoryUsage ? `${stats.memoryUsage}%` : ''}
+                      text={stats && stats.memoryUsage ? `${stats.memoryUsage}%` : '0%'}
                       strokeWidth={12}
                       styles={buildStyles({
                         rotation: 0.7,
                         strokeLinecap: 'butt',
                         pathTransitionDuration: 0.5,
-                        pathColor: `#3B98D6`,
+                        pathColor: parseInt(stats.memoryUsage) < 60 ? `#3B98D6` : `red`,
                         textColor: '#333333',
                         trailColor: '#f8f8f8',
                         backgroundColor: '#e4e4e4',
@@ -121,13 +120,13 @@ function Dashboard() {
                     Humidity
                     <CircularProgressbar
                       value={stats.roomHumidity}
-                      text={stats && stats.roomHumidity ? `${stats.roomHumidity}%` : ''}
+                      text={stats && stats.roomHumidity ? `${stats.roomHumidity}%` : '0%'}
                       strokeWidth={12}
                       styles={buildStyles({
                         rotation: 0.7,
                         strokeLinecap: 'butt',
                         pathTransitionDuration: 0.5,
-                        pathColor: `#3B98D6`,
+                        pathColor: parseInt(stats.roomHumidity) < 60 ? `#3B98D6` : `red`,
                         textColor: '#333333',
                         trailColor: '#f8f8f8',
                         backgroundColor: '#e4e4e4',
@@ -139,31 +138,32 @@ function Dashboard() {
                     Temperature_C
                     <CircularProgressbar
                       value={stats.roomTemperatureC}
-                      text={stats && stats.roomTemperatureC ? `${stats.roomTemperatureC}%` : ''}
+                      text={stats && stats.roomTemperatureC ? `${stats.roomTemperatureC}%` : '0%'}
                       strokeWidth={12}
                       styles={buildStyles({
                         rotation: 0.7,
                         strokeLinecap: 'butt',
                         pathTransitionDuration: 0.5,
-                        pathColor: `#3B98D6`,
+                        pathColor: parseInt(stats.roomTemperatureC) < 60 ? `#3B98D6` : `red`,
                         textColor: '#333333',
                         trailColor: '#f8f8f8',
                         backgroundColor: '#e4e4e4',
                       })}
                     />
                   </div>
-                </Col>                <Col>
+                </Col>
+                <Col>
                   <div style={{ width: '110px', height: '100px' }}>
                     Temperature_F
                     <CircularProgressbar
                       value={stats.roomTemperatureF}
-                      text={stats && stats.roomTemperatureF ? `${stats.roomTemperatureF}%` : ''}
+                      text={stats && stats.roomTemperatureF ? `${stats.roomTemperatureF}%` : '0%'}
                       strokeWidth={12}
                       styles={buildStyles({
                         rotation: 0.7,
                         strokeLinecap: 'butt',
                         pathTransitionDuration: 0.5,
-                        pathColor: `#3B98D6`,
+                        pathColor: parseInt(stats.roomTemperatureF) < 60 ? `#3B98D6` : `red`,
                         textColor: '#333333',
                         trailColor: '#f8f8f8',
                         backgroundColor: '#e4e4e4',
