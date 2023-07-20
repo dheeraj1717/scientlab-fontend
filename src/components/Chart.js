@@ -4,7 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
 
 const MetricChart = (metrics, type) => {
   return (
-    <LineChart width={800} height={300} data={metrics.data}>
+    <LineChart width={800} height={300} data={metrics}>
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="timestamp" />
       <YAxis />
@@ -15,9 +15,9 @@ const MetricChart = (metrics, type) => {
         <Line type="monotone" dataKey="cpuUsage" stroke="#82ca9d" />
         <Line type="monotone" dataKey="temperatureC" stroke="#82ca9d" />
       </div> : <div>
-        <Line type="monotone" dataKey="roomTemperatureF" stroke="#8884d8" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="roomTemperatureC" stroke="#82ca9d" />
-        <Line type="monotone" dataKey="roomHumidity" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="temperatureF" stroke="#8884d8" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="temperatureC" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="humidity" stroke="#82ca9d" />
       </div>}
 
     </LineChart>

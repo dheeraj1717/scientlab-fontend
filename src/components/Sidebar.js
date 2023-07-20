@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import './Sidebar.css';
 
 function Sidebar() {
-  const [activeItem, setActiveItem] = useState({label: 'Summary'});
+  const [activeItem, setActiveItem] = useState({ label: 'Summary' });
 
   const handleItemClick = (item) => {
     setActiveItem(item);
@@ -15,35 +15,28 @@ function Sidebar() {
   const user = useSelector((state) => state.auth.user);
 
 
-  const adminSidebarItems = [
-    { id: 1, label: 'Summary', icon: faChartBar, nav: '/dashboard' },
-    { id: 2, label: 'Device Metrics', icon: faChartLine, nav: '/device' },
-    { id: 3, label: 'Environment Metrics', icon: faChartLine, nav: '/environment' }
+  const sidebarItems = [
+    { id: 1, label: 'Summary', icon: faChartBar, nav: '/dashboard', role: "all" },
+    { id: 2, label: 'Device Metrics', icon: faChartLine, nav: '/device', role: "admin" },
+    { id: 3, label: 'Environment Metrics', icon: faChartLine, nav: '/environment', role: "admin" }
   ];
-
-  const  customerSidebarItems = [
-    { id: 1, label: 'Summary', icon: faChartBar, nav: '/dashboard' },
-    ];
-
-
-  const role = `${user.role}`;
-
-  const sidebarItems = (role === "admin"? adminSidebarItems: customerSidebarItems)
-
 
   return (
     <div className="sidebar">
-      {sidebarItems.map(item =>
-        <Link
-          key={item.id}
-          to={item.nav}
-          className={`sidebar-item ${activeItem.label === item.label ? 'active' : ''}`}
-          onClick={() => handleItemClick(item)}
-        >
-          <FontAwesomeIcon icon={item.icon} /> 
-          {item.label}
-           </Link>
-      )}
+      {sidebarItems.map(item => {
+        if (item.role === "all" || item.role === user.role) {
+          return <Link
+            key={item.id}
+            to={item.nav}
+            className={`sidebar-item ${activeItem.label === item.label ? 'active' : ''}`}
+            onClick={() => handleItemClick(item)}
+          >
+            <FontAwesomeIcon icon={item.icon} />&nbsp;
+            {item.label}
+          </Link>
+        }
+        return ""
+      })}
     </div>
   );
 }
