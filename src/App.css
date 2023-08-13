@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .App {
   text-align: center;
 }
@@ -72,6 +76,7 @@
 .navbar {
   height: 60px;
   padding: 10px 20px;
+  z-index: 1;
 }
 
 .navbar-brand {
@@ -134,10 +139,7 @@
   font-weight: bold;
 }
 
-.main-content {
-  margin-left: 200px; /* Adjust this value to match the width of the sidebar */
-  padding-top: 80px;
-}
+
 
 /* src/App.css */
 
@@ -150,4 +152,15 @@ svg {
   color: #fff;
   padding: 5px 10px;
   font-size: 12px;
+}
+
+/* Add this CSS to make the map responsive */
+.responsive-map {
+  height: 720px; /* Default height for larger screens */
+  width: 95%; /* Default width for larger screens */
+
+  @media (max-width: 768px) {
+    height: 400px; /* Height for mobile screens */
+    width: 100%; /* Width for mobile screens */
+  }
 }

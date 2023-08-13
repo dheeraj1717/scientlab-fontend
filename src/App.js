@@ -12,6 +12,7 @@ import Environment from './components/Environment';
 
 import './App.css';
 import Profile from './components/Profile';
+import newDevice from './components/newDevice';
 
 function App() {
 
@@ -21,8 +22,11 @@ function App() {
     <BrowserRouter>
       <div className="app">
         {isLoggedIn ? <SciNavbar /> : ""}
-        <div className="main-content">
-          <Routes>
+        <div className="flex">
+         <div className="z-[1]">{isLoggedIn ? <Sidebar /> : ""}</div>
+       
+         <div className="w-full mt-[60px] md:pl-6 pl-0">
+         <Routes >
             <Route
               path="/login"
               element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <Login />}
@@ -42,11 +46,17 @@ function App() {
             <Route
               path="/profile"
               element={isLoggedIn ? <Profile /> : <Navigate to="/login" replace />}
-            />            
+            />      
+            <Route
+              path="/profile"
+              element={isLoggedIn ? <Profile /> : <Navigate to="/login" replace />}
+            />         
+                     
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
+         </div>
         </div>
-        {isLoggedIn ? <Sidebar /> : ""}
+       
       </div>
     </BrowserRouter>
   );

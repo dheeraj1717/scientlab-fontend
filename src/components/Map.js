@@ -5,13 +5,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarker } from "@fortawesome/free-solid-svg-icons";
 import { renderToString } from "react-dom/server"; // Import ReactDOMServer
 
-function MouseoverMap({ locations, handleMarkerClick }) {
-  const [hoveredMarker, setHoveredMarker] = useState(null);
+function MouseoverMap({ locations, handleMarkerClick, openCharts }) {
+  const mapHeight = openCharts ? "500px" : "720px";
+  const mapWidth = openCharts ? "100%" : "95%";
+  const zoomLevel = openCharts ? 1 : 2;
 
   useEffect(() => {
-    const mymap = L.map("map").setView([0, 0], 1, { lang: "en" }); // Set the lang option here
+    const mapOptions = {
+      minZoom: zoomLevel,
+      maxZoom: 20,
+    };
 
-    // Use Google Streets tile layer instead of OpenStreetMap
+   
+      // Apply maxBounds only when openCharts is false
+      mapOptions.maxBounds = [[-90, -180], [90, 180]];
+
+
+    const mymap = L.map("map", mapOptions).setView([0, 0], zoomLevel, {
+      lang: "en",
+    });
     const googleStreets = L.tileLayer(
       "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
       {
@@ -48,12 +60,10 @@ function MouseoverMap({ locations, handleMarkerClick }) {
       });
 
       marker.on("mouseover", () => {
-        setHoveredMarker(location);
         marker.openPopup();
       });
 
       marker.on("mouseout", () => {
-        setHoveredMarker(null);
         marker.closePopup();
       });
     });
@@ -61,9 +71,10 @@ function MouseoverMap({ locations, handleMarkerClick }) {
     return () => {
       mymap.remove();
     };
-  }, [locations, handleMarkerClick]);
+  }, [locations, handleMarkerClick, openCharts]);
 
-  return <div id="map" style={{ height: "500px" }} />;
+  // Return the map container div here
+  return <div id="map" style={{ height: mapHeight, width: mapWidth ,zIndex:"1"}} />;
 }
 
 export default MouseoverMap;
