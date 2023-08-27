@@ -1,18 +1,15 @@
-// $gradient-bg: linear-gradient( 94.3deg,  rgba(30,30,30,1) 10.9%, rgba(81,84,115,1) 87.1% );
-// $sidebar-bg-color: $gradient-bg;
+
 $sidebar-bg-color: #1d1d1d;
 $submenu-bg-color: rgba(255, 255, 255, 0.05);
 $submenu-bg-color-collapsed: rgba(29, 29, 29, 0.95);
-$sidebar-color: #adadad;
-$highlight-color: #d8d8d8;
+$sidebar-color: #d6d6d6;
+$highlight-color: #ffffff;
 $icon-bg-color: rgba(255, 255, 255, 0.05);
 $icon-size: 35px;
-
 @import '~react-pro-sidebar/dist/scss/styles.scss';
 body {
   margin: 0;
   height: 100vh;
-  color: #353535;
   font-family: sans-serif;
 }
 
@@ -70,10 +67,9 @@ body {
   }
 
   main {
-    padding: 24px;
+    padding: 10px 24px 24px 24px;
     flex-grow: 1;
     display: flex;
-    flex-direction: column;
     overflow-y: auto;
     
     header {
@@ -108,6 +104,9 @@ body {
   @media (max-width: $breakpoint-md) {
     .btn-toggle {
       display: flex;
+    }
+    main{
+       padding: 10px 5px 10px 5px; 
     }
   }
 }

@@ -7,7 +7,7 @@ import { renderToString } from "react-dom/server"; // Import ReactDOMServer
 
 function MouseoverMap({ locations, handleMarkerClick, openCharts }) {
   const mapHeight = openCharts ? "500px" : "720px";
-  const mapWidth = openCharts ? "100%" : "95%";
+  const mapWidth = openCharts ? "100%" : "100%";
   const zoomLevel = openCharts ? 1 : 2;
 
   useEffect(() => {
@@ -16,10 +16,11 @@ function MouseoverMap({ locations, handleMarkerClick, openCharts }) {
       maxZoom: 20,
     };
 
-   
-      // Apply maxBounds only when openCharts is false
-      mapOptions.maxBounds = [[-90, -180], [90, 180]];
-
+    // Apply maxBounds only when openCharts is false
+    mapOptions.maxBounds = [
+      [-90, -180],
+      [90, 180],
+    ];
 
     const mymap = L.map("map", mapOptions).setView([0, 0], zoomLevel, {
       lang: "en",
@@ -32,31 +33,41 @@ function MouseoverMap({ locations, handleMarkerClick, openCharts }) {
       }
     ).addTo(mymap);
 
-    // Create a custom FontAwesome icon for the markers
-    const markerIcon = L.divIcon({
-      className: "custom-marker-icon", // Custom CSS class to style the marker icon
-      html: renderToString(
-        // Use ReactDOMServer.renderToString to convert the FontAwesome icon to HTML
-        <div style={{ fontSize: "24px", color: "red" }}>
-          <FontAwesomeIcon icon={faMapMarker} />
-        </div>
-      ),
-      iconSize: [30, 30],
-      popupAnchor: [-5, -2], // Icon size (width, height) in pixels
-    });
-
     // Add markers and popups for each location
     locations.forEach((location) => {
+      const isActive = location.active; // Create a variable to hold the active status
+      const markerIcon = L.divIcon({
+        className: "custom-marker-icon",
+        html: renderToString(
+          <div
+            style={{
+              fontSize: "24px",
+              color: isActive ? "red" : "gray",
+            }}
+          >
+            <FontAwesomeIcon icon={faMapMarker} />
+          </div>
+        ),
+        iconSize: [30, 30],
+        popupAnchor: [-5, -2],
+      });
+
       const marker = L.marker([location.latitude, location.longitude], {
-        icon: markerIcon, // Use the custom FontAwesome icon as the marker icon
+        icon: markerIcon,
       }).addTo(mymap);
 
       // Custom popup content to show the location on hover
-      const popupContent = `<b>${location.location}</b>`;
+      const popupContent = `
+      <b>${location.location}</b>
+      <span style="display: inline-block; width: 10px; height: 10px; background-color: ${
+        isActive ? "green" : "grey" // Use the isActive variable here
+      }; border-radius: 50%; margin-left: 5px;"></span>
+    `;
+
       marker.bindPopup(popupContent);
 
       marker.on("click", () => {
-        handleMarkerClick(location); // Pass the selected marker data to the parent component
+        handleMarkerClick(location);
       });
 
       marker.on("mouseover", () => {
@@ -74,7 +85,9 @@ function MouseoverMap({ locations, handleMarkerClick, openCharts }) {
   }, [locations, handleMarkerClick, openCharts]);
 
   // Return the map container div here
-  return <div id="map" style={{ height: mapHeight, width: mapWidth ,zIndex:"1"}} />;
+  return (
+    <div id="map" style={{ height: mapHeight, width: mapWidth, zIndex: "1" }} />
+  );
 }
 
 export default MouseoverMap;
