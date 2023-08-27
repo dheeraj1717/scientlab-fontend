@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'; // Import useState
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,12 +6,18 @@ import { logout } from '../redux/actions/authActions';
 
 import { faUser, faSignOutAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/logo2.png';
-import SearchBar from './SearchBar'
+import SearchBar from './SearchBar';
 
 function SciNavbar() {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const [isDropdownOpen, setDropdownOpen] = useState(false); // State to control dropdown visibility
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen); // Toggle dropdown visibility
+  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -34,7 +40,7 @@ function SciNavbar() {
           <div className="pt-2">
           </div>
           <div className="relative">
-            <button className="text-white">
+            <button className="text-white" onClick={toggleDropdown}> {/* Attach toggleDropdown function */}
               {user.image && user.image !== '' ? (
                 <img
                   src={user.image}
@@ -49,8 +55,9 @@ function SciNavbar() {
               )}
               <span className='capitalize ml-2 '>{user.username}</span>
             </button>
-            <div className="absolute right-0 mt-2 w-48 bg-dark rounded-lg shadow-lg hidden">
-              <ul className="py-1">
+            <div className={`absolute right-0 mt-2 w-48 bg-dark z-10 rounded-lg shadow-lg ${isDropdownOpen ? '' : 'hidden'}`}>
+              {/* Use isDropdownOpen state to conditionally apply hidden class */}
+              <ul className="py-1 pl-0">
                 <li className="hover:bg-gray-700">
                   <button
                     onClick={getAccount}
