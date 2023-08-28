@@ -47,12 +47,14 @@ function App() {
         )}
 
         <main className={`${isLoggedIn ? "flex-col" : "flex-row"}`}>
-          <div
-            className="btn-toggle mb-2 bg-black text-white w-fit p-2 rounded-md"
-            onClick={() => handleToggleSidebar(true)}
-          >
-            <FaBars />
-          </div>
+          {isLoggedIn && (
+            <div
+              className="btn-toggle mb-2 bg-black text-white w-fit p-2 rounded-md"
+              onClick={() => handleToggleSidebar(true)}
+            >
+              <FaBars />
+            </div>
+          )}
           <Routes>
             <Route
               path="/login"
