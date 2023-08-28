@@ -1,137 +1,209 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'react-bootstrap';
-import DateTimePicker from 'react-datetime-picker';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { MDBDataTable } from 'mdbreact';
-import { CSVLink } from 'react-csv'
-import { getMetrics, getStats, clearMetrics } from '../redux/actions/deviceActions';
-
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "react-bootstrap";
+import DateTimePicker from "react-datetime-picker";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+import { MDBDataTable } from "mdbreact";
+import { CSVLink } from "react-csv";
+import {
+  getMetrics,
+  getStats,
+  clearMetrics,
+} from "../redux/actions/deviceActions";
+import DataTable from "react-data-table-component";
 const Environment = () => {
-    const dispatch = useDispatch();
-    const [device, setDevice] = useState(null);
-    const [fromDate, setFromDate] = useState(new Date());
-    const [toDate, setToDate] = useState(new Date());
+  const dispatch = useDispatch();
+  const [device, setDevice] = useState(null);
+  const [fromDate, setFromDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
 
-    const devices = useSelector(state => state.devices.devices);
-    const user = useSelector((state) => state.auth.user);
-    const metrics = useSelector(state => state.devices.metrics);
+  const devices = useSelector((state) => state.devices.devices);
+  const user = useSelector((state) => state.auth.user);
+  const metrics = useSelector((state) => state.devices.metrics);
 
-    useEffect(() => {
-        dispatch(clearMetrics())
-    }, [])
+  useEffect(() => {
+    dispatch(clearMetrics());
+  }, []);
 
-    const viewMetrics = () => {
-        if (device) {
-            dispatch(getMetrics({ "device": device.name, "location": device.location, "startDate": fromDate, "endDate": toDate }, user.accessToken, 'environment'))
-        }
+  const viewMetrics = () => {
+    if (device) {
+      dispatch(
+        getMetrics(
+          {
+            device: device.name,
+            location: device.location,
+            startDate: fromDate,
+            endDate: toDate,
+          },
+          user.accessToken,
+          "environment"
+        )
+      );
     }
+  };
 
-    const selectDevice = (event) => {
-        const device = JSON.parse(event.target.value);
-        dispatch(getStats(device.name, device.location, user.accessToken))
-        setDevice(device);
-    }
+  const selectDevice = (event) => {
+    const device = JSON.parse(event.target.value);
+    dispatch(getStats(device.name, device.location, user.accessToken));
+    setDevice(device);
+  };
+  const customStyles = {
+    title: {
+      style: {
+        fontWeight: "bold",
+      },
+    },
+    headCells: {
+      style: {
+        fontSize: "15px",
+        fontWeight: "bold",
+        backgroundColor: "#3982d7",
+        color: "white",
+      },
+    },
+    cells: {
+      style: {
+        fontSize: "14px",
+        fontWeight: "500",
+      },
+    },
+  };
+  const empty = [
+    {
+      timestamp: "0",
+      humidity: "0",
+      temperatureF: "0",
+      temperatureC: "0",
+    },
+  ];
+  const columns = [
+    {
+      name: "Timestamp",
+      selector: "timestamp",
+      sortable: true,
+    },
+    {
+      name: "Humidity",
+      selector: "humidity",
+      sortable: true,
+    },
+    {
+      name: "Temperature (F)",
+      selector: "temperatureF",
+      sortable: true,
+    },
+    {
+      name: "Temperature (C)",
+      selector: "temperatureC",
+      sortable: true,
+    },
+  ];
 
-    const loadEnvironmentTable = () => {
-        const data = {
-            columns: [
-                {
-                    label: 'Timestamp',
-                    field: 'timestamp',
-                    sort: 'asc',
-                    width: 150
-                },
-                {
-                    label: 'Humidity',
-                    field: 'humidity',
-                    sort: 'asc',
-                    width: 270
-                },
-                {
-                    label: 'Temperature (F)',
-                    field: 'temperatureF',
-                    sort: 'asc',
-                    width: 200
-                },
-                {
-                    label: 'Temperature (C)',
-                    field: 'temperatureC',
-                    sort: 'asc',
-                    width: 100
-                },
-            ],
-            rows: metrics
-        };
-
-        const deviceHeaders = [
-            { label: "Timestamp", key: "timestamp" },
-            { label: "Humidity", key: "humidity" },
-            { label: "Temperature(F)", key: "temperatureF" },
-            { label: "Temperature(C)", key: "temperatureC" }
-        ];
-
-        return (
-            <>
-                <div className="d-flex justify-content-end">
-                    {metrics.length > 0 &&
-                        <Button> <CSVLink data={metrics} header={deviceHeaders} filename="EnvironmentMetrices.csv" style={{ color: '#ffffff', textDecoration: "none" }}>Export</CSVLink></Button>
-                    }
-                    {metrics.length === 0 &&
-                        <Button>Export</Button>
-                    }
-                </div>
-                <MDBDataTable
-                    striped
-                    bordered
-                    small
-                    scrollY
-                    maxHeight="300px"
-                    data={data}
-                />
-
-            </>
-        );
-    }
-
-    return (
-        <>
-            <div>
-                Device Location:
-                <select onChange={selectDevice}>
-                    <option default>Select Device Location</option>
-                    {devices.map(device =>
-                        <option value={JSON.stringify(device)}>{device.location}</option>
-                    )}
-                </select>
-                &nbsp;&nbsp;
-                From:
-                <DateTimePicker
-                    value={fromDate}
-                    onChange={date => setFromDate(date)}
-                />
-                &nbsp;&nbsp;
-                To:
-                <DateTimePicker
-                    value={toDate}
-                    onChange={date => setToDate(date)}
-                />&nbsp;&nbsp;
-                <Button onClick={viewMetrics}>Go</Button>
-                &nbsp;&nbsp;
-                {metrics.length >= 0 ? <LineChart width={800} height={300} data={metrics}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="timestamp" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="temperatureF" stroke="#8884d8" activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="temperatureC" stroke="#82ca9d" />
-                    <Line type="monotone" dataKey="humidity" stroke="#82ca9d" />
-                </LineChart> : ""}
-            </div>
-            <hr />
-            {metrics.length >= 0 && loadEnvironmentTable()}
-        </>);
-}
+  return (
+    <>
+      <div>
+        <div className="flex flex-auto lg:flex-row flex-col">
+          <div className="md:mb-0 mb-2 md:mt-2">
+            {" "}
+            <span className="md:text-lg text-md font-medium mr-1">
+              Device Location :
+            </span>
+            <select onChange={selectDevice} className="mr-5">
+              <option className="" defaultValue>
+                Select Device Location
+              </option>
+              {devices?.map((device) => (
+                <option key={device.name} value={JSON.stringify(device)}>
+                  {device.location}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            {" "}
+            <span className="font-semibold md:text-lg text-md  mr-2">
+              From :
+            </span>
+            <DateTimePicker
+              value={fromDate}
+              onChange={(date) => setFromDate(date)}
+              className="mr-5"
+            />
+            <span className="font-semibold md:text-lg text-md  mr-2">To :</span>
+            <DateTimePicker
+              value={toDate}
+              onChange={(date) => setToDate(date)}
+            />
+            &nbsp;&nbsp;
+            <Button onClick={viewMetrics}>Go</Button>
+          </div>
+        </div>
+        {metrics.length >= 0 ? (
+          <LineChart width={800} height={300} data={metrics}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="timestamp" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey="temperatureF"
+              stroke="#8884d8"
+              activeDot={{ r: 8 }}
+            />
+            <Line type="monotone" dataKey="temperatureC" stroke="#82ca9d" />
+            <Line type="monotone" dataKey="humidity" stroke="#82ca9d" />
+          </LineChart>
+        ) : (
+          ""
+        )}
+      </div>
+      <hr />
+      <div className="d-flex justify-content-end">
+        {metrics.length > 0 && (
+          <Button>
+            {" "}
+            <CSVLink
+              data={metrics}
+              header={columns}
+              filename="DevicesMetrics.csv"
+              style={{ color: "#ffffff", textDecoration: "none" }}
+            >
+              Export
+            </CSVLink>
+          </Button>
+        )}
+        {metrics.length === 0 && <Button>Export</Button>}
+      </div>
+      {metrics.length > 0 ? (
+        <DataTable
+          title="Device Metrics"
+          columns={columns}
+          data={metrics}
+          customStyles={customStyles}
+          pagination
+          striped
+        />
+      ) : (
+        <DataTable
+          title="Device Metrics"
+          columns={columns}
+          data={empty}
+          customStyles={customStyles}
+          pagination
+          striped
+        />
+      )}
+    </>
+  );
+};
 
 export default Environment;

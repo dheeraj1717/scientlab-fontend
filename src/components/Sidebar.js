@@ -40,6 +40,11 @@ const SciSidebar = ({
       label: "Devices",
       to: "/device",
     },
+    {
+      icon: <FontAwesomeIcon icon={faChartBar} />,
+      label: "Environment",
+      to: "/environment",
+    },
   ];
 
   const [searchTerm, setSearchTerm] = useState("");

@@ -85,9 +85,9 @@ function App() {
               }
             />
             <Route
-              path="/profile"
+              path="/environment"
               element={
-                isLoggedIn ? <Profile /> : <Navigate to="/login" replace />
+                isLoggedIn ? <Environment /> : <Navigate to="/login" replace />
               }
             />
 
