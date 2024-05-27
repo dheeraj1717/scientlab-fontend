@@ -51,7 +51,7 @@ function Login() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" md={{ height: "100vh",width:"100%" }}>
+      <Grid container component="main" md={{ height: "100vh", width: "100%" }}>
         <CssBaseline />
         <Grid
           item

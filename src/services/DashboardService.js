@@ -85,3 +85,29 @@ export const getChartMetrics = async (request, token, type) => {
     }
   });
 };
+
+export const toggleActiveDevice = async (deviceId, token) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await fetch(`${BASE_URL}/devices/update`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        resolve(responseData);
+      } else {
+       
+        console.error("Error:", response.status);
+        reject(response.status);
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+      reject(error);
+    }
+  });
+};
